@@ -19,7 +19,7 @@ The easiest way to run Homey Dashboard:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/homey-dashboard.git
+git clone https://github.com/vebjornhallas/homey-dashboard.git
 cd homey-dashboard
 
 # Start the container
@@ -51,7 +51,7 @@ The SQLite database is stored in `./data/` and persists across container restart
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/homey-dashboard.git
+git clone https://github.com/vebjornhallas/homey-dashboard.git
 cd homey-dashboard
 
 # Install dependencies
