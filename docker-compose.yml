@@ -5,10 +5,13 @@ services:
     ports:
       - "${PORT:-8080}:80"
     volumes:
-      - ./data:/var/www/html/database
+      - db_data:/var/www/html/database/data
     environment:
       - APP_NAME=Homey Dashboard
       - APP_ENV=production
       - APP_DEBUG=false
       - APP_URL=http://localhost:${PORT:-8080}
     restart: unless-stopped
+
+volumes:
+  db_data:

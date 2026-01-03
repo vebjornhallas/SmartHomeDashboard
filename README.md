@@ -20,7 +20,7 @@ The easiest way to run Homey Dashboard:
 ```bash
 # Clone the repository
 git clone https://github.com/vebjornhallas/SmartHomeDashboard.git
-cd SmartHomeDashboard
+cd SmartHomeDa
 
 # Start the container
 docker compose up -d

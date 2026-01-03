@@ -8,8 +8,6 @@ RUN npm ci
 
 COPY resources ./resources
 COPY vite.config.js ./
-COPY tailwind.config.js ./
-COPY postcss.config.js ./
 
 RUN npm run build
 
@@ -22,16 +20,29 @@ RUN apk add --no-cache \
     nginx \
     supervisor \
     sqlite \
+    sqlite-dev \
     curl \
     zip \
     unzip \
     git \
-    && docker-php-ext-install pdo pdo_mysql
+    libzip-dev \
+    icu-dev \
+    && docker-php-ext-install pdo pdo_sqlite zip intl
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
+
+# Copy composer files first for better caching
+COPY composer.json composer.lock ./
+
+# Create required directories before composer install
+RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache database \
+    && chown -R www-data:www-data storage bootstrap/cache database
+
+# Install PHP dependencies (ignore platform reqs for Alpine compatibility)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs
 
 # Copy application files
 COPY --chown=www-data:www-data . .
@@ -39,15 +50,9 @@ COPY --chown=www-data:www-data . .
 # Copy built frontend assets
 COPY --from=frontend --chown=www-data:www-data /app/public/build ./public/build
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Create SQLite database directory
-RUN mkdir -p database && touch database/database.sqlite && chown -R www-data:www-data database
-
-# Create necessary directories
-RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+# Clear any cached config and ensure proper ownership
+RUN rm -rf bootstrap/cache/*.php \
+    && chown -R www-data:www-data storage bootstrap/cache database
 
 # Copy nginx config
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
