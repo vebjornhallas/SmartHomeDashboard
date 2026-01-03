@@ -19,8 +19,8 @@ The easiest way to run Homey Dashboard:
 
 ```bash
 # Clone the repository
-git clone https://github.com/vebjornhallas/homey-dashboard.git
-cd homey-dashboard
+git clone https://github.com/vebjornhallas/SmartHomeDashboard.git
+cd SmartHomeDashboard
 
 # Start the container
 docker compose up -d
@@ -51,8 +51,8 @@ The SQLite database is stored in `./data/` and persists across container restart
 
 ```bash
 # Clone the repository
-git clone https://github.com/vebjornhallas/homey-dashboard.git
-cd homey-dashboard
+git clone https://github.com/vebjornhallas/SmartHomeDashboard.git
+cd SmartHomeDashboard
 
 # Install dependencies
 composer install
